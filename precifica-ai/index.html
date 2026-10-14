@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ED2D29">
+<meta name="description" content="Descubra por quanto vender no Pede.aí para receber o mesmo valor do balcão.">
+<title>Precifica.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+<style>
+/* Layout: uma coluna no celular; no desktop, ajustes à esquerda e resultado fixo à direita */
+:root{
+  --bg:#FFF4EE;
+  --surface:#FFFFFF;
+  --surface-2:#FFF0E9;
+  --line:#F3D9CC;
+  --ink:#333333;
+  --ink-2:#6B5A53;
+  --red:#ED2D29;
+  --red-strong:#D9221F;
+  --red-soft:#FFE3DF;
+  --orange:#F88221;
+  --green:#1F8A4C;
+  --green-soft:#E3F4EA;
+  --shadow:0 1px 2px rgba(120,40,20,.06),0 8px 24px rgba(120,40,20,.07);
+  --f:"Nunito",ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r-lg:22px;--r-md:14px;--r-sm:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1B1716;--surface:#262020;--surface-2:#2F2725;--line:#3E3331;--ink:#F6EEEA;--ink-2:#C2B1AA;
+  --red:#FF4B47;--red-strong:#FF6461;--red-soft:#4A2422;--orange:#FF9A45;--green:#4BC983;--green-soft:#1F3A2B;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1B1716;--surface:#262020;--surface-2:#2F2725;--line:#3E3331;--ink:#F6EEEA;--ink-2:#C2B1AA;
+  --red:#FF4B47;--red-strong:#FF6461;--red-soft:#4A2422;--orange:#FF9A45;--green:#4BC983;--green-soft:#1F3A2B;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.num{font-variant-numeric:tabular-nums}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:6px}
+
+/* header */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:40px;height:37px;color:var(--red);flex:none}
+.word{font-weight:900;font-size:28px;letter-spacing:-.02em;line-height:1}
+.word b{color:var(--red);font-weight:900}
+.tag{font-size:13px;color:var(--ink-2);font-weight:700;margin-top:2px}
+.intro{max-width:62ch;margin:0;color:var(--ink-2);font-size:16px}
+.intro strong{color:var(--ink)}
+
+/* tabs */
+.tabs{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;align-self:flex-start}
+.tabs button{border:0;background:transparent;padding:9px 18px;border-radius:999px;font-weight:800;cursor:pointer;color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--red);color:#fff}
+
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start}
+@media (min-width:880px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}.sticky{position:sticky;top:calc(16px + env(safe-area-inset-top,0px))}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow);min-width:0}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.tabs{max-width:100%}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);margin:0 0 14px;font-weight:800}
+.stack{display:flex;flex-direction:column;gap:22px}
+
+/* fields */
+.field{display:flex;flex-direction:column;gap:8px}
+.lbl{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:800}
+.lbl output{font-size:22px;font-weight:900;color:var(--red)}
+.hint{font-size:13px;color:var(--ink-2);margin:0}
+.money{display:flex;align-items:center;border:2px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);padding:0 14px;transition:border-color .15s}
+.money:focus-within{border-color:var(--red)}
+.money span{font-weight:800;color:var(--ink-2)}
+.money input{border:0;background:transparent;outline:0;padding:12px 8px;width:100%;min-width:0;font-size:22px;font-weight:900}
+.text{border:2px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);padding:12px 14px;width:100%;font-weight:700}
+.text:focus{outline:0;border-color:var(--red)}
+
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:99px;background:linear-gradient(to right,var(--red) var(--p),var(--line) var(--p))}
+input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:linear-gradient(to right,var(--red) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:4px solid var(--red);margin-top:-9px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--red);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.scale{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);font-weight:700;margin-top:-4px}
+
+.plans{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.plan{border:2px solid var(--line);background:var(--surface-2);border-radius:var(--r-md);padding:12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.plan strong{font-size:15px}
+.plan .pct{font-size:22px;font-weight:900}
+.plan small{color:var(--ink-2);font-weight:700}
+.plan[aria-checked="true"]{border-color:var(--red);background:var(--red-soft)}
+.plan[aria-checked="true"] .pct{color:var(--red)}
+
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:800;cursor:pointer}
+.switch input{appearance:none;-webkit-appearance:none;width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background .15s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch input:checked{background:var(--red)}
+.switch input:checked::after{transform:translateX(18px)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.field{min-width:0}
+.pair .money input{font-size:18px;padding:10px 6px}
+.sub{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:var(--r-md);background:var(--surface-2)}
+.sub label.small{font-size:13px;font-weight:800;color:var(--ink-2)}
+.sub .money{background:var(--surface)}
+
+.ratebar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--r-md);border:1px dashed var(--line);font-weight:800}
+.ratebar span:last-child{font-size:20px;font-weight:900;color:var(--red)}
+
+/* result */
+.result{display:flex;flex-direction:column;gap:18px}
+.hero{background:var(--red);color:#fff;border-radius:var(--r-lg);padding:22px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.hero .k{font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;opacity:.9}
+.hero .big{font-size:clamp(44px,11vw,64px);font-weight:900;line-height:1;letter-spacing:-.02em}
+.hero .exact{font-size:14px;font-weight:700;opacity:.92}
+.chip{display:inline-flex;align-self:flex-start;gap:6px;background:rgba(255,255,255,.18);border-radius:99px;padding:5px 12px;font-weight:800;font-size:14px;margin-top:6px}
+
+.rows{display:flex;flex-direction:column}
+.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-weight:700}
+.row:last-child{border-bottom:0}
+.row .v{font-weight:800;white-space:nowrap}
+.row.minus .v{color:var(--ink-2)}
+.row.total{font-size:18px}
+.row.total .v{color:var(--green);font-weight:900}
+.ok{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);color:var(--ink);border-radius:var(--r-md);padding:12px 14px;font-weight:700;font-size:14px}
+.ok i{font-style:normal;color:var(--green);font-weight:900}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.mini{border:1px solid var(--line);border-radius:var(--r-md);padding:12px;background:var(--surface-2);display:flex;flex-direction:column;gap:2px}
+.mini small{font-weight:800;color:var(--ink-2);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.mini strong{font-size:20px;font-weight:900}
+.mini span{font-size:13px;font-weight:700;color:var(--ink-2)}
+
+/* preview card mimicking the app listing */
+.preview{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:var(--r-md);padding:12px;background:var(--surface)}
+.thumb{width:56px;height:56px;border-radius:12px;background:var(--red-soft);display:grid;place-items:center;flex:none;color:var(--red)}
+.thumb svg{width:28px;height:26px}
+.preview .nm{font-weight:900;overflow-wrap:anywhere}
+.preview .pr{color:var(--red);font-weight:900;font-size:18px}
+.preview .was{font-size:12px;color:var(--ink-2);font-weight:700}
+
+/* list */
+.list-in{display:flex;flex-direction:column;gap:8px}
+.li{display:grid;grid-template-columns:minmax(0,1fr) 120px 36px;gap:8px;align-items:center}
+.li .money{padding:0 10px}
+.li .money input{font-size:16px;padding:10px 4px}
+.li .text{padding:10px 12px}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;font-weight:900;color:var(--ink-2);display:grid;place-items:center}
+.icon-btn:hover{color:var(--red);border-color:var(--red)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{border:2px solid var(--red);background:var(--surface);color:var(--red);border-radius:999px;padding:9px 16px;font-weight:900;cursor:pointer}
+.btn.solid{background:var(--red);color:#fff}
+.btn:hover{filter:brightness(.97)}
+details.paste summary{cursor:pointer;font-weight:800;color:var(--red);list-style:none}
+details.paste summary::-webkit-details-marker{display:none}
+details.paste textarea{width:100%;min-height:110px;margin-top:10px;border:2px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);padding:10px 12px;font:inherit;font-size:14px;color:var(--ink);resize:vertical}
+.examples{font-size:12px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:.06em}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-md)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+thead th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);background:var(--surface-2);font-weight:800}
+tbody tr+tr td{border-top:1px solid var(--line)}
+td.app{color:var(--red);font-weight:900}
+td.up{color:var(--ink-2);font-weight:700}
+.toast{font-size:13px;font-weight:800;color:var(--green);min-height:1.2em}
+
+/* explain + contact */
+details.how{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 20px}
+details.how summary{cursor:pointer;font-weight:900}
+details.how p,details.how li{color:var(--ink-2);font-size:15px;max-width:68ch}
+.formula{font-weight:900;color:var(--ink);background:var(--surface-2);border-radius:10px;padding:10px 12px;display:inline-block}
+.contact{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--ink);color:var(--bg);border-radius:var(--r-lg);padding:18px 20px}
+.contact p{margin:0;font-weight:700}
+.contact .tel{font-size:22px;font-weight:900;letter-spacing:.01em;user-select:all}
+.contact .btns .btn{border-color:var(--bg);background:transparent;color:var(--bg)}
+.contact .btns .btn.solid{background:#25A35A;border-color:#25A35A;color:#fff}
+footer{font-size:12px;color:var(--ink-2);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:420px){th,td{padding:9px 7px;font-size:13.5px}thead th{font-size:10.5px;letter-spacing:.03em}.li{grid-template-columns:minmax(0,1fr) 104px 36px}.split{grid-template-columns:1fr}}
+/* tabs on phone: three equal columns */
+@media (max-width:520px){.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;border-radius:16px;align-self:stretch}.tabs button{padding:9px 6px;border-radius:12px;font-size:14px;line-height:1.2}}
+/* menu upload */
+.drop{border:2px dashed var(--line);border-radius:var(--r-lg);background:var(--surface-2);padding:26px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--red);background:var(--red-soft)}
+.drop strong{font-size:17px;font-weight:900}
+.drop .thumb{width:52px;height:52px}
+.files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.files li{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 12px;font-weight:700;font-size:14px}
+.files li span:first-child{overflow-wrap:anywhere;min-width:0}
+.files li small{color:var(--ink-2);white-space:nowrap}
+.status{display:flex;gap:10px;align-items:center;font-weight:800;font-size:14px;background:var(--surface-2);border-radius:var(--r-md);padding:12px 14px}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--red);animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+.err{margin:0;background:var(--red-soft);border-radius:var(--r-md);padding:12px 14px;font-weight:800;font-size:14px}
+.found-sum{margin:0 0 10px;font-weight:800}
+.found-sum b{color:var(--red);font-size:20px}
+.found-list{list-style:none;margin:0 0 14px;padding:0;border:1px solid var(--line);border-radius:var(--r-md);max-height:320px;overflow:auto}
+.found-list li{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;font-weight:700;font-size:14px}
+.found-list li+li{border-top:1px solid var(--line)}
+.found-list li.cat{background:var(--surface-2);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);font-weight:900}
+.found-list li span:first-child{min-width:0;overflow-wrap:anywhere}
+.found-list li span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.cat td{background:var(--surface-2);font-weight:900;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);text-align:left;padding-block:7px}
+.imported{font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.06em}
+.link-btn{border:0;background:none;padding:0;color:var(--red);font-weight:800;cursor:pointer;text-align:left}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="pin" viewBox="0 0 42 38"><path fill-rule="evenodd" clip-rule="evenodd" d="M27.4418 0.00153231H13.8683C10.1918 0.00890527 6.66801 1.47294 4.06868 4.07302C1.46934 6.67311 0.00631845 10.1973 1.51646e-06 13.8739V20.9534C-0.00111327 23.3269 0.612418 25.6603 1.78085 27.7262C2.96088 29.8314 4.66894 31.5928 6.73677 32.837C8.80461 34.0812 11.1609 34.7652 13.5735 34.8218C13.5788 32.9451 14.3269 31.1468 15.6543 29.8202C16.9817 28.4935 18.7804 27.7464 20.6571 27.7422H27.4299C29.2711 27.7742 31.1003 27.4392 32.8108 26.7569C34.5212 26.0746 36.0787 25.0586 37.3924 23.7681C38.7061 22.4776 39.7497 20.9384 40.4623 19.2404C41.175 17.5424 41.5424 15.7195 41.5432 13.8779C41.544 12.0364 41.1781 10.2132 40.4669 8.51453C39.7558 6.81589 38.7135 5.27584 37.4009 3.9842C36.0883 2.69257 34.5317 1.67519 32.8219 0.991411C31.112 0.30763 29.2831 -0.0288708 27.4418 0.00153231ZM27.7287 14.1966V14.3041C27.6729 15.1691 27.4567 16.0161 27.0913 16.8021C26.4224 18.275 25.2694 19.4744 23.824 20.2007C22.3787 20.9271 20.7281 21.1366 19.1471 20.7943C17.5662 20.452 16.1501 19.5786 15.1345 18.3195C14.119 17.0604 13.5653 15.4915 13.5655 13.8739C13.5655 13.7822 13.5655 13.6946 13.5655 13.6029C13.6186 12.3426 14.0069 11.1191 14.6904 10.0589C15.3739 8.99859 16.3279 8.13983 17.4539 7.57115C18.44 7.06433 19.5325 6.7994 20.6411 6.79825C22.5196 6.79824 24.3213 7.54307 25.6514 8.86943C26.9815 10.1958 27.7314 11.9955 27.7367 13.8739C27.7367 13.9814 27.7327 14.089 27.7287 14.1966Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M24.0475 34.8376C23.9886 35.6956 23.6062 36.4993 22.9776 37.0862C22.349 37.6731 21.5211 37.9996 20.6611 37.9996C19.8011 37.9996 18.9731 37.6731 18.3445 37.0862C17.716 36.4993 17.3336 35.6956 17.2747 34.8376C17.2731 34.6883 17.2838 34.539 17.3066 34.3914C17.4147 33.576 17.8152 32.8276 18.4337 32.2853C19.0522 31.7431 19.8465 31.4438 20.6691 31.4432C21.2689 31.4434 21.8577 31.6043 22.3742 31.9094C22.8844 32.209 23.3073 32.637 23.6008 33.1507C23.8943 33.6644 24.0483 34.246 24.0475 34.8376Z" fill="currentColor"/></symbol></svg>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg aria-hidden="true"><use href="#pin"/></svg>
+      <div>
+        <div class="word">precifica<b>.ai</b></div>
+        <div class="tag">Calculadora de preços para parceiros Pede.aí</div>
+      </div>
+    </div>
+  </header>
+
+  <p class="intro">Digite o preço que você cobra <strong>à vista no balcão</strong>. A calculadora mostra por quanto vender no app para que, depois das taxas, <strong>você receba o mesmo valor</strong>.</p>
+
+  <div class="grid">
+    <!-- AJUSTES -->
+    <section class="card" aria-labelledby="h-aj">
+      <h2 id="h-aj">Seus dados</h2>
+      <div class="stack">
+
+        <div class="field">
+          <div class="lbl"><label for="com">Comissão do app</label><output id="com-out" class="num">8%</output></div>
+          <input type="range" id="com" min="0" max="20" step="0.5" value="8">
+          <div class="scale"><span>0%</span><span>20%</span></div>
+        </div>
+
+        <div class="field">
+          <div class="lbl"><span id="plan-lbl">Plano de pagamento online</span></div>
+          <div class="plans" role="radiogroup" aria-labelledby="plan-lbl">
+            <button class="plan" role="radio" aria-checked="true" data-plan="semanal" id="plan-semanal"><strong>Repasse semanal</strong><span class="pct num">3,49%</span><small>recebe 1x por semana</small></button>
+            <button class="plan" role="radio" aria-checked="false" data-plan="diario" id="plan-diario"><strong>Repasse diário</strong><span class="pct num">4,99%</span><small>recebe todo dia</small></button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="lbl"><label for="onl">Vendas pagas online</label><output id="onl-out" class="num">40%</output></div>
+          <input type="range" id="onl" min="0" max="100" step="5" value="40">
+          <div class="scale"><span>0%</span><span>Média do app: 40%</span><span>100%</span></div>
+          <p class="hint">A taxa do pagamento online só é cobrada nos pedidos pagos pelo app. Dinheiro e maquininha na entrega pagam apenas a comissão.</p>
+        </div>
+
+        <label class="switch" for="r99"><span>Arredondar para final ,99</span><input type="checkbox" id="r99" checked></label>
+
+        <div class="ratebar"><span>Desconto médio por venda</span><span id="rate" class="num">–</span></div>
+      </div>
+    </section>
+
+    <!-- RESULTADO -->
+    <section class="sticky col" aria-live="polite">
+      <div class="tabs" role="tablist" aria-label="Modo">
+      <button role="tab" id="tab-one" aria-selected="false" data-mode="one">Um produto</button>
+      <button role="tab" id="tab-list" aria-selected="true" data-mode="list">Lista de produtos</button>
+      <button role="tab" id="tab-menu" aria-selected="false" data-mode="menu">Enviar cardápio</button>
+    </div>
+        <div class="card field" id="one-input">
+          <label class="lbl" for="price">Preço no balcão (à vista)</label>
+          <div class="money"><span>R$</span><input id="price" class="num" inputmode="decimal" autocomplete="off" value="30,00"></div>
+          <input id="pname" class="text" placeholder="Nome do produto (opcional)" value="" aria-label="Nome do produto">
+        </div>
+      <div class="result" id="res-one">
+        <div class="hero">
+          <span class="k">Venda no app por</span>
+          <span class="big num" id="o-app">R$ 0,00</span>
+          <span class="exact num" id="o-exact"></span>
+          <span class="chip num" id="o-diff"></span>
+        </div>
+
+        <div class="card">
+          <h2>Quanto você recebe</h2>
+          <div class="rows num">
+            <div class="row"><span>Preço no app</span><span class="v" id="b-app"></span></div>
+            <div class="row minus"><span id="b-com-l">Comissão</span><span class="v" id="b-com"></span></div>
+            <div class="row minus"><span id="b-onl-l">Taxa online (média)</span><span class="v" id="b-onl"></span></div>
+            <div class="row total"><span>Você recebe</span><span class="v" id="b-net"></span></div>
+          </div>
+          <div class="ok" style="margin-top:12px"><i>✓</i><span id="b-msg"></span></div>
+        </div>
+
+        <div class="card">
+          <h2>Por tipo de pagamento</h2>
+          <div class="split num">
+            <div class="mini"><small>Pago online</small><strong id="p-onl"></strong><span id="p-onl-s"></span></div>
+            <div class="mini"><small>Dinheiro / maquininha</small><strong id="p-cash"></strong><span id="p-cash-s"></span></div>
+          </div>
+          <p class="hint" style="margin-top:10px">Pedido a pedido o valor varia um pouco. Na média do mês, você recebe o mesmo que no balcão.</p>
+        </div>
+
+        <div class="card">
+          <h2>Como fica no app</h2>
+          <div class="preview">
+            <div class="thumb"><svg aria-hidden="true"><use href="#pin"/></svg></div>
+            <div style="min-width:0"><div class="nm" id="pv-name">Seu produto</div><div class="pr num" id="pv-price"></div><div class="was num" id="pv-was"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" id="res-list" hidden>
+        <div class="card">
+          <h2>Seus produtos</h2>
+          <div class="stack" style="gap:14px">
+            <span class="examples" id="ex-tag">Exemplos — troque pelos seus produtos</span>
+            <span class="imported" id="imp-tag" hidden>Lido do cardápio — confira nomes e preços</span>
+            <div class="list-in" id="items"></div>
+            <div class="btns">
+              <button class="btn" id="add">+ Adicionar produto</button>
+              <button class="btn" id="clear">Limpar lista</button>
+            </div>
+            <button class="link-btn" id="go-menu">Tem o cardápio em PDF ou foto? Envie e a lista é montada sozinha →</button>
+            <details class="paste">
+              <summary>Colar lista de uma vez</summary>
+              <p class="hint" style="margin-top:8px">Um produto por linha, com o preço no final. Ex.: <b>X-Burguer 22,00</b></p>
+              <textarea id="paste-in" placeholder="X-Burguer 22,00&#10;X-Tudo 30,00&#10;Coca lata 6,00"></textarea>
+              <div class="btns" style="margin-top:8px"><button class="btn solid" id="paste-go">Adicionar à lista</button></div>
+            </details>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Preços para cadastrar no app</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Produto</th><th>Balcão</th><th>No app</th><th>Você recebe</th></tr></thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+          <div class="btns" style="margin-top:12px;align-items:center">
+            <button class="btn solid" id="copy">Copiar tabela</button>
+            <span class="toast" id="toast" role="status"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" id="res-menu" hidden>
+        <div class="card">
+          <h2>Enviar cardápio</h2>
+          <div class="stack" style="gap:14px">
+            <p class="hint" style="font-size:15px;margin:0">Envie o cardápio da loja em PDF ou foto. A leitura encontra os produtos e preços e monta a tabela para você conferir.</p>
+            <label class="drop" id="drop" for="menu-file">
+              <span class="thumb"><svg aria-hidden="true"><use href="#pin"/></svg></span>
+              <strong>Escolher arquivo</strong>
+              <span class="hint">ou arraste aqui · PDF, PNG ou JPG · até 20 páginas</span>
+            </label>
+            <input type="file" id="menu-file" accept="application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp" multiple hidden>
+            <ul class="files" id="files"></ul>
+            <div class="btns">
+              <button class="btn solid" id="read" disabled>Ler cardápio</button>
+              <button class="btn" id="stop" hidden>Parar</button>
+            </div>
+            <div class="status" id="status" hidden><span class="spin" aria-hidden="true"></span><span id="status-t"></span></div>
+            <p class="err" id="err" role="alert" hidden></p>
+          </div>
+        </div>
+        <div class="card" id="found" hidden>
+          <h2>Produtos encontrados</h2>
+          <p class="found-sum" id="found-sum"></p>
+          <ul class="found-list num" id="found-list"></ul>
+          <div class="btns">
+            <button class="btn solid" id="use-replace">Usar na tabela</button>
+            <button class="btn" id="use-append" hidden>Adicionar à lista atual</button>
+          </div>
+          <p class="hint" style="margin-top:12px">Confira nomes e preços na tabela antes de cadastrar. Fotos tremidas ou com letra pequena podem gerar erros de leitura.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <details class="how">
+    <summary>Como a conta funciona</summary>
+    <p>O app desconta a <b>comissão</b> sobre o valor dos produtos em todos os pedidos. Nos pedidos pagos online, desconta também a <b>taxa do pagamento online</b> sobre o valor pago.</p>
+    <p>A calculadora soma esses descontos na proporção das suas vendas online e encontra o preço que devolve exatamente o seu preço de balcão:</p>
+    <p><span class="formula">Preço no app = Preço no balcão ÷ (1 − comissão − % online × taxa online)</span></p>
+    <p>Com o arredondamento ligado, o preço sobe até o próximo final ,99, então você recebe igual ou um pouco mais.</p>
+  </details>
+
+  <footer>precifica.ai · valores de referência, confira as taxas do seu contrato</footer>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const BRL=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+  const money=v=>BRL.format(v).replace(/ /g,' ');
+  const pct=(v,d=2)=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:d})+'%';
+  const parse=s=>{if(s==null)return NaN;s=String(s).replace(/[^\d,.\-]/g,'');if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.')}return parseFloat(s)};
+  const fmtIn=v=>isFinite(v)?v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'';
+
+  const EXAMPLES=[['X-Burguer',22],['X-Tudo',30],['Batata frita média',18],['Refrigerante lata',6]];
+  let S={mode:'list',plan:'semanal',items:EXAMPLES.map(([n,p])=>({n,p:fmtIn(p)})),examples:true};
+  try{const saved=JSON.parse(localStorage.getItem('precifica')||'null');if(saved){
+    ['com','onl'].forEach(k=>{if(saved[k]!=null)$(k).value=saved[k]});
+    ['price','pname'].forEach(k=>{if(saved[k]!=null)$(k).value=saved[k]});
+    if(saved.r99!=null)$('r99').checked=saved.r99;
+    if(saved.plan)S.plan=saved.plan; if(saved.items&&saved.items.length){S.items=saved.items;S.examples=!!saved.examples;S.imported=!!saved.imported}
+  }}catch(e){}
+  function save(){try{localStorage.setItem('precifica',JSON.stringify({com:$('com').value,onl:$('onl').value,price:$('price').value,pname:$('pname').value,r99:$('r99').checked,plan:S.plan,mode:S.mode,items:S.items,examples:S.examples,imported:!!S.imported}))}catch(e){}}
+
+  function params(){
+    const c=+$('com').value/100, s=+$('onl').value/100, t=S.plan==='diario'?0.0499:0.0349;
+    const k=1;
+    const r=c+s*t*k;
+    return {c,s,t,k,r,round:$('r99').checked};
+  }
+  function ceil99(x){let v=Math.floor(x)+0.99;if(v+1e-9<x)v+=1;return Math.round(v*100)/100}
+  function appPrice(P,p){
+    const exact=P/(1-p.r);
+    const final=p.round?ceil99(exact):Math.ceil(exact*100-1e-6)/100;
+    return {exact,final};
+  }
+  function setFill(el){const p=(el.value-el.min)/(el.max-el.min)*100;el.style.setProperty('--p',p+'%')}
+
+  function render(){
+    const p=params();
+    $('com-out').textContent=pct(p.c,1);
+    $('onl-out').textContent=pct(p.s,0);
+    setFill($('com'));setFill($('onl'));
+    $('rate').textContent=pct(p.r,2);
+    document.querySelectorAll('.plan').forEach(b=>b.setAttribute('aria-checked',b.dataset.plan===S.plan));
+    document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.mode===S.mode));
+    $('one-input').hidden=S.mode!=='one';
+    $('res-one').hidden=S.mode!=='one';
+    $('res-list').hidden=S.mode!=='list';
+    $('res-menu').hidden=S.mode!=='menu';
+    if(p.r>=1){$('o-app').textContent='—';return}
+    if(S.mode==='one')renderOne(p);else if(S.mode==='list')renderList(p);
+    save();
+  }
+
+  function renderOne(p){
+    const P=parse($('price').value);
+    const valid=isFinite(P)&&P>0;
+    const {exact,final}=valid?appPrice(P,p):{exact:0,final:0};
+    const com=final*p.c, onl=final*p.s*p.t*p.k, net=final-com-onl;
+    $('o-app').textContent=money(final);
+    $('o-exact').textContent=valid?(p.round?'Valor exato: '+money(exact)+' · arredondado para ,99':'Valor exato, sem arredondar'):'Digite o preço do balcão';
+    $('o-diff').textContent=valid?('+ '+money(final-P)+' ('+pct(final/P-1,1)+') sobre o balcão'):'';
+    $('o-diff').hidden=!valid;
+    $('b-app').textContent=money(final);
+    $('b-com-l').textContent='Comissão ('+pct(p.c,1)+')';
+    $('b-com').textContent='− '+money(com);
+    $('b-onl-l').textContent='Taxa online ('+pct(p.t)+' em '+pct(p.s,0)+' das vendas'+')';
+    $('b-onl').textContent='− '+money(onl);
+    $('b-net').textContent=money(net);
+    const extra=net-P;
+    $('b-msg').textContent=valid?('No balcão você recebe '+money(P)+'. No app, na média, recebe '+money(net)+(extra>0.005?' ('+money(extra)+' a mais por causa do arredondamento).':'. Mesmo valor.')):'Digite um preço para ver o cálculo.';
+    const netOnl=final*(1-p.c-p.t*p.k), netCash=final*(1-p.c);
+    $('p-onl').textContent=money(netOnl);
+    $('p-onl-s').textContent=valid?(netOnl>=P?'+ ':'− ')+money(Math.abs(netOnl-P))+' vs balcão':'';
+    $('p-cash').textContent=money(netCash);
+    $('p-cash-s').textContent=valid?(netCash>=P?'+ ':'− ')+money(Math.abs(netCash-P))+' vs balcão':'';
+    $('pv-name').textContent=$('pname').value.trim()||'Seu produto';
+    $('pv-price').textContent=money(final);
+    $('pv-was').textContent=valid?'No balcão: '+money(P):'';
+  }
+
+  function itemRow(it,i){
+    const row=document.createElement('div');row.className='li';
+    row.innerHTML='<input class="text" aria-label="Produto '+(i+1)+'" placeholder="Produto"><div class="money"><span>R$</span><input class="num" inputmode="decimal" aria-label="Preço do produto '+(i+1)+'" placeholder="0,00"></div><button class="icon-btn" aria-label="Remover produto '+(i+1)+'">×</button>';
+    const [n,pr]=row.querySelectorAll('input');
+    n.id='it-n-'+i;pr.id='it-p-'+i;
+    n.value=it.n;pr.value=it.p;
+    n.addEventListener('input',()=>{it.n=n.value;S.examples=false;renderTable(params())});
+    pr.addEventListener('input',()=>{it.p=pr.value;S.examples=false;renderTable(params())});
+    pr.addEventListener('blur',()=>{const v=parse(pr.value);if(isFinite(v)){pr.value=fmtIn(v);it.p=pr.value}});
+    row.querySelector('button').addEventListener('click',()=>{S.items.splice(i,1);S.examples=false;renderList(params(),true)});
+    return row;
+  }
+  function renderList(p,rebuild){
+    const box=$('items');
+    if(rebuild||box.children.length!==S.items.length){box.innerHTML='';S.items.forEach((it,i)=>box.appendChild(itemRow(it,i)))}
+    renderTable(p);
+  }
+  function renderTable(p){
+    $('ex-tag').hidden=!S.examples;
+    const tb=$('tbody');tb.innerHTML='';
+    $('imp-tag').hidden=!S.imported;
+    let any=false,lastC=null;
+    S.items.forEach(it=>{
+      const P=parse(it.p);if(!(P>0))return;any=true;
+      if(it.c&&it.c!==lastC){const cr=document.createElement('tr');cr.className='cat';const cd=document.createElement('td');cd.colSpan=4;cd.textContent=it.c;cr.appendChild(cd);tb.appendChild(cr)}
+      lastC=it.c||lastC;
+      const {final}=appPrice(P,p);
+      const net=final*(1-p.r);
+      const tr=document.createElement('tr');
+      const td0=document.createElement('td');td0.textContent=it.n||'—';
+      tr.appendChild(td0);
+      tr.insertAdjacentHTML('beforeend','<td>'+money(P)+'</td><td class="app">'+money(final)+'</td><td class="up">'+money(net)+'</td>');
+      tb.appendChild(tr);
+    });
+    if(!any)tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--ink-2)">Adicione produtos com preço para ver a tabela.</td></tr>';
+    save();
+  }
+
+  function tableText(){
+    const p=params();
+    const lines=['*Preços para o Pede.aí* (comissão '+pct(p.c,1)+', online '+pct(p.t)+' em '+pct(p.s,0)+' das vendas)',''];
+    let lastC=null;
+    S.items.forEach(it=>{const P=parse(it.p);if(!(P>0))return;if(it.c&&it.c!==lastC){lines.push('','*'+it.c+'*');lastC=it.c}const {final}=appPrice(P,p);lines.push((it.n||'Produto')+': '+money(P)+' → *'+money(final)+'*')});
+    lines.push('','Calculado no precifica.ai');
+    return lines.join('\n');
+  }
+  async function copy(text,btn,msgEl,ok){
+    try{await navigator.clipboard.writeText(text);if(msgEl)msgEl.textContent=ok;else{const o=btn.textContent;btn.textContent=ok;setTimeout(()=>btn.textContent=o,1600)}}
+    catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();let done=false;try{done=document.execCommand('copy')}catch(_){}ta.remove();
+      const m=done?ok:'Não deu para copiar automaticamente. Selecione e copie manualmente.';if(msgEl)msgEl.textContent=m;else btn.textContent=m}
+    if(msgEl)setTimeout(()=>msgEl.textContent='',2500);
+  }
+
+  // events
+  ['com','onl','r99'].forEach(id=>{$(id).addEventListener('input',render);$(id).addEventListener('change',render)});
+  ['price','pname'].forEach(id=>$(id).addEventListener('input',render));
+  ['price'].forEach(id=>$(id).addEventListener('blur',()=>{const v=parse($(id).value);if(isFinite(v))$(id).value=fmtIn(v)}));
+  document.querySelectorAll('.plan').forEach(b=>b.addEventListener('click',()=>{S.plan=b.dataset.plan;render()}));
+  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{S.mode=b.dataset.mode;render();if(S.mode==='list')renderList(params(),true)}));
+  $('add').addEventListener('click',()=>{if(S.examples){S.items=[];S.examples=false}S.items.push({n:'',p:''});renderList(params(),true);const ins=$('items').querySelectorAll('.li');ins[ins.length-1].querySelector('input').focus()});
+  $('clear').addEventListener('click',()=>{S.items=[{n:'',p:''}];S.examples=false;S.imported=false;renderList(params(),true)});
+  $('paste-go').addEventListener('click',()=>{
+    const lines=$('paste-in').value.split(/\n+/).map(l=>l.trim()).filter(Boolean);
+    const add=[];
+    lines.forEach(l=>{const m=l.match(/^(.*?)[\s\-–:;|\t]*(?:R\$\s*)?(\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?|\d+(?:[.,]\d{1,2})?)\s*$/);if(m){add.push({n:m[1].trim()||'Produto',p:fmtIn(parse(m[2]))})}});
+    if(!add.length)return;
+    if(S.examples)S.items=[];
+    S.items=S.items.filter(it=>it.n||it.p).concat(add);S.examples=false;$('paste-in').value='';
+    renderList(params(),true);
+  });
+  $('copy').addEventListener('click',e=>copy(tableText(),e.currentTarget,$('toast'),'Tabela copiada. Cole no WhatsApp ou no bloco de notas.'));
+
+
+  // ---------- Enviar cardápio ----------
+  const PROMPT=[
+    'Você está lendo o cardápio de uma loja de delivery. As imagens são as páginas do cardápio, em ordem.',
+    'Extraia TODOS os produtos vendidos que têm preço.',
+    'Responda SOMENTE com linhas JSON, um objeto por linha, sem texto antes ou depois e sem markdown. Formato de cada linha:',
+    '{"categoria":"Lanches","nome":"X-Burguer","preco":22.9}',
+    'Regras:',
+    '- "preco" é um número em reais com ponto decimal (R$ 22,90 vira 22.9).',
+    '- Produto com tamanhos ou versões de preços diferentes: uma linha para cada, com o tamanho no nome. Ex.: "Pizza Calabresa (Média)".',
+    '- Inclua bebidas e adicionais com preço (adicionais na categoria "Adicionais").',
+    '- "categoria" é a seção do cardápio onde o produto aparece; se não houver seções, use "".',
+    '- Ignore itens sem preço, taxa de entrega, telefones, horários e textos de promoção sem produto definido.',
+    '- Escreva os nomes como aparecem no cardápio, corrigindo só erros óbvios de leitura. Não invente produtos nem preços.',
+    '- Siga a ordem do cardápio.'
+  ].join('\n');
+  const MAX_PAGES=20, API_URL='/api/ler-cardapio';
+  let files=[], ctl=null, found=[];
+
+  const show=(id,on)=>{$(id).hidden=!on};
+  function fail(msg){show('status',false);$('err').textContent=msg;show('err',!!msg)}
+  function status(msg){show('err',false);show('status',true);$('status-t').textContent=msg}
+  const sizeTxt=b=>b>1048576?(b/1048576).toLocaleString('pt-BR',{maximumFractionDigits:1})+' MB':Math.max(1,Math.round(b/1024))+' KB';
+  const isPdf=f=>f.type==='application/pdf'||/\.pdf$/i.test(f.name);
+  const isImg=f=>/^image\/(png|jpe?g|webp)$/.test(f.type)||/\.(png|jpe?g|webp)$/i.test(f.name);
+
+  function setFiles(list){
+    const all=[...list];
+    files=all.filter(f=>isPdf(f)||isImg(f));
+    const ul=$('files');ul.innerHTML='';
+    files.forEach(f=>{const li=document.createElement('li');const a=document.createElement('span');a.textContent=f.name;const b=document.createElement('small');b.textContent=(isPdf(f)?'PDF · ':'Imagem · ')+sizeTxt(f.size);li.append(a,b);ul.appendChild(li)});
+    $('read').disabled=!files.length;
+    show('found',false);
+    if(all.length&&!files.length)fail('Esse tipo de arquivo não é aceito. Envie PDF, PNG ou JPG.');else fail('');
+  }
+
+  function loadPdfJs(){
+    if(window.pdfjsLib)return Promise.resolve();
+    return new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload=()=>{try{window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';ok()}catch(e){no(e)}};
+      s.onerror=()=>no(new Error('pdfjs'));document.head.appendChild(s)});
+  }
+  const toJpeg=c=>new Promise((ok,no)=>c.toBlob(b=>b?ok(b):no(new Error('blob')),'image/jpeg',0.85));
+  function canvasFor(w,h){const c=document.createElement('canvas');c.width=Math.round(w);c.height=Math.round(h);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);return [c,x]}
+  async function imageToJpeg(f){
+    let src;
+    try{src=await createImageBitmap(f,{imageOrientation:'from-image'})}
+    catch(e){src=await new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(e);im.src=URL.createObjectURL(f)})}
+    const w=src.width,h=src.height,k=Math.min(1,2000/Math.max(w,h));
+    const [c,x]=canvasFor(w*k,h*k);x.drawImage(src,0,0,c.width,c.height);
+    return toJpeg(c);
+  }
+  async function prepare(signal){
+    const out=[];
+    for(const f of files){
+      if(out.length>=MAX_PAGES)break;
+      if(signal.aborted)throw {code:'cancelled'};
+      if(isPdf(f)){
+        try{await loadPdfJs()}catch(e){throw {code:'pdf_lib'}}
+        let pdf;
+        try{pdf=await window.pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise}catch(e){throw {code:'pdf_open',name:f.name}}
+        for(let i=1;i<=pdf.numPages&&out.length<MAX_PAGES;i++){
+          if(signal.aborted)throw {code:'cancelled'};
+          status('Preparando página '+(out.length+1)+'…');
+          const pg=await pdf.getPage(i);const v1=pg.getViewport({scale:1});
+          const vp=pg.getViewport({scale:Math.min(3,1800/Math.max(v1.width,v1.height))});
+          const [c,x]=canvasFor(vp.width,vp.height);
+          await pg.render({canvasContext:x,viewport:vp}).promise;
+          out.push(await toJpeg(c));
+        }
+      }else{
+        status('Preparando imagem '+(out.length+1)+'…');
+        try{out.push(await imageToJpeg(f))}catch(e){throw {code:'img_open',name:f.name}}
+      }
+    }
+    return out;
+  }
+
+  const countLines=txt=>(txt.match(/\}\s*$/gm)||[]).length;
+  function parseItems(txt){
+    const seen=new Set(),out=[];
+    txt.split('\n').forEach(l=>{
+      l=l.trim().replace(/,$/,'');if(!l.startsWith('{'))return;
+      let o;try{o=JSON.parse(l)}catch(e){return}
+      const n=String(o.nome||'').trim();const p=typeof o.preco==='number'?o.preco:parse(o.preco);
+      if(!n||!(p>0))return;
+      const c=String(o.categoria||'').trim();
+      const key=(c+'|'+n+'|'+p).toLowerCase();if(seen.has(key))return;seen.add(key);
+      out.push({c,n,p:fmtIn(p)});
+    });
+    return out;
+  }
+  function chunks(arr,n){const r=[];for(let i=0;i<arr.length;i+=n)r.push(arr.slice(i,i+n));return r}
+  const partNote=(a,b,total)=>total>b-a+1?'\n\nEstas são as páginas '+a+' a '+b+' de um cardápio com '+total+' páginas. Extraia só o que aparece nelas.':'';
+
+  async function readWithClaude(sample,blobs,signal,onCount){
+    const lim=await sample.limits().catch(()=>null);
+    const max=lim&&lim.images?lim.images.maxCount:0;
+    if(!max)throw {code:'images_unavailable'};
+    let all='',done=0,start=1;
+    for(const part of chunks(blobs,max)){
+      const end=start+part.length-1;
+      const r=await sample(PROMPT+partNote(start,end,blobs.length),{images:part,signal,cache:false,onText:({text})=>onCount(done+countLines(text))});
+      all+=r.text+'\n';done=countLines(all);start=end+1;
+    }
+    return all;
+  }
+  const b64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=no;r.readAsDataURL(b)});
+  async function readWithApi(blobs,signal,onCount){
+    let all='',done=0,start=1;
+    for(const part of chunks(blobs,8)){
+      const end=start+part.length-1;
+      const images=await Promise.all(part.map(async b=>({media_type:'image/jpeg',data:await b64(b)})));
+      let res;
+      try{res=await fetch(API_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({images,inicio:start,fim:end,total:blobs.length}),signal})}
+      catch(e){throw signal.aborted?{code:'cancelled'}:{code:'network'}}
+      if(!res.ok){let j={};try{j=await res.json()}catch(e){}throw {code:j.error||('http_'+res.status)}}
+      const rd=res.body.getReader(),dec=new TextDecoder();let buf='',txt='';
+      for(;;){
+        const {value,done:fin}=await rd.read();if(fin)break;
+        buf+=dec.decode(value,{stream:true});
+        const evs=buf.split('\n\n');buf=evs.pop();
+        for(const ev of evs){for(const line of ev.split('\n')){
+          if(!line.startsWith('data:'))continue;
+          let d;try{d=JSON.parse(line.slice(5))}catch(e){continue}
+          if(d.type==='content_block_delta'&&d.delta&&d.delta.type==='text_delta')txt+=d.delta.text;
+          else if(d.type==='error')throw {code:'upstream'};
+        }}
+        onCount(done+countLines(txt));
+      }
+      all+=txt+'\n';done=countLines(all);start=end+1;
+    }
+    return all;
+  }
+
+  const ERR={
+    not_granted:'A leitura precisa da sua permissão para usar o Claude. Recarregue a página e permita para tentar de novo.',
+    sampling_disabled:'A leitura com o Claude não está disponível para esta conta.',
+    images_unavailable:'Esta visualização não consegue enviar imagens para leitura. Abra a página pelo app ou site do Claude.',
+    rate_limited:'Muitas leituras em pouco tempo. Espere alguns minutos e tente de novo.',
+    not_configured:'A leitura de cardápio ainda não foi configurada neste site.',
+    too_large:'O arquivo ficou grande demais para enviar. Envie menos páginas por vez.',
+    forbidden:'Leitura bloqueada para este endereço.',
+    pdf_lib:'Não foi possível carregar o leitor de PDF. Verifique a internet e tente de novo.',
+    network:'Sem conexão com o servidor. Verifique a internet e tente de novo.',
+    unavailable:'A leitura de cardápio não está disponível nesta página.',
+    image_rejected:'Uma das imagens não foi aceita. Tente outro arquivo em JPG ou PNG.',
+    refused:'A leitura foi recusada para esse arquivo. Tente outro arquivo.'
+  };
+  function errMsg(e){
+    if(e&&e.code==='pdf_open')return 'Não conseguimos abrir o PDF "'+e.name+'". Ele pode estar protegido por senha ou corrompido.';
+    if(e&&e.code==='img_open')return 'Não conseguimos abrir a imagem "'+e.name+'". Envie em JPG ou PNG.';
+    return (e&&ERR[e.code])||'A leitura falhou. Tente de novo em instantes.';
+  }
+
+  async function runRead(){
+    ctl=new AbortController();const signal=ctl.signal;
+    $('read').disabled=true;show('stop',true);show('found',false);fail('');
+    try{
+      let reader;
+      if(window.claude&&typeof window.claude.use==='function'){
+        status('Conectando…');
+        const sample=await window.claude.use('sample');
+        if(!sample)throw {code:'unavailable'};
+        reader=(b,s,cb)=>readWithClaude(sample,b,s,cb);
+      }else reader=readWithApi;
+      const blobs=await prepare(signal);
+      if(!blobs.length)throw {code:'img_open',name:files[0]?files[0].name:''};
+      status('Lendo o cardápio ('+blobs.length+(blobs.length>1?' páginas':' página')+')… costuma levar de 20 segundos a 1 minuto.');
+      const txt=await reader(blobs,signal,n=>{if(n)status('Lendo o cardápio… '+n+(n>1?' produtos encontrados':' produto encontrado'))});
+      found=parseItems(txt);
+      show('status',false);
+      if(!found.length){fail('Não encontramos produtos com preço nesse arquivo. Tente uma foto mais nítida ou o cardápio em PDF.');return}
+      showFound();
+    }catch(e){
+      if(signal.aborted||(e&&e.code==='cancelled')){show('status',false);fail('Leitura interrompida.')}
+      else fail(errMsg(e));
+    }finally{
+      $('read').disabled=!files.length;show('stop',false);ctl=null;
+    }
+  }
+  function showFound(){
+    const cats=new Set(found.map(i=>i.c).filter(Boolean));
+    $('found-sum').innerHTML='';
+    const b=document.createElement('b');b.textContent=found.length;
+    $('found-sum').append(b,' '+(found.length>1?'produtos':'produto')+(cats.size?' em '+cats.size+(cats.size>1?' categorias':' categoria'):''));
+    const ul=$('found-list');ul.innerHTML='';let last=null;
+    found.forEach(it=>{
+      if(it.c&&it.c!==last){const h=document.createElement('li');h.className='cat';h.textContent=it.c;ul.appendChild(h);last=it.c}
+      const li=document.createElement('li');const a=document.createElement('span');a.textContent=it.n;const p=document.createElement('span');p.textContent=money(parse(it.p));li.append(a,p);ul.appendChild(li);
+    });
+    const hasOwn=!S.examples&&S.items.some(it=>parse(it.p)>0);
+    $('use-replace').textContent=hasOwn?'Substituir lista atual':'Usar na tabela';
+    show('use-append',hasOwn);
+    show('found',true);
+    $('found').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function useFound(append){
+    const items=found.map(i=>({c:i.c,n:i.n,p:i.p}));
+    S.items=append?S.items.filter(it=>it.n||it.p).concat(items):items;
+    S.examples=false;S.imported=true;S.mode='list';
+    render();renderList(params(),true);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  $('menu-file').addEventListener('change',e=>setFiles(e.target.files));
+  const drop=$('drop');
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
+  drop.addEventListener('drop',e=>{if(e.dataTransfer&&e.dataTransfer.files)setFiles(e.dataTransfer.files)});
+  $('read').addEventListener('click',runRead);
+  $('stop').addEventListener('click',()=>{if(ctl)ctl.abort()});
+  $('use-replace').addEventListener('click',()=>useFound(false));
+  $('use-append').addEventListener('click',()=>useFound(true));
+  $('go-menu').addEventListener('click',()=>{S.mode='menu';render()});
+
+  render();
+  if(S.mode==='list')renderList(params(),true);
+})();
+</script>
+
+</body>
+</html>
