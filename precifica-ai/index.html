@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ED2D29">
-<meta name="description" content="Descubra por quanto vender no Pede.aí para receber o mesmo valor do balcão.">
+<meta name="description" content="Descubra por quanto vender no app para receber o mesmo valor do balcão.">
 <title>Precifica.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -223,7 +223,7 @@ tr.cat td{background:var(--surface-2);font-weight:900;font-size:11.5px;text-tran
       <svg aria-hidden="true"><use href="#pin"/></svg>
       <div>
         <div class="word">precifica<b>.ai</b></div>
-        <div class="tag">Calculadora de preços para parceiros Pede.aí</div>
+        <div class="tag">Calculadora de preços para parceiros</div>
       </div>
     </div>
   </header>
@@ -510,7 +510,7 @@ tr.cat td{background:var(--surface-2);font-weight:900;font-size:11.5px;text-tran
 
   function tableText(){
     const p=params();
-    const lines=['*Preços para o Pede.aí* (comissão '+pct(p.c,1)+', online '+pct(p.t)+' em '+pct(p.s,0)+' das vendas)',''];
+    const lines=['*Preços para o pede.ai* (comissão '+pct(p.c,1)+', online '+pct(p.t)+' em '+pct(p.s,0)+' das vendas)',''];
     let lastC=null;
     S.items.forEach(it=>{const P=parse(it.p);if(!(P>0))return;if(it.c&&it.c!==lastC){lines.push('','*'+it.c+'*');lastC=it.c}const {final}=appPrice(P,p);lines.push((it.n||'Produto')+': '+money(P)+' → *'+money(final)+'*')});
     lines.push('','Calculado no precifica.ai');
